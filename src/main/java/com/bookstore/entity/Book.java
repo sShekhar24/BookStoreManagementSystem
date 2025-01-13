@@ -4,21 +4,35 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
-// Marking this class as an Entity to map with the database table
+/**
+ * Entity class representing the "Book" table in the database.
+ * Maps the Java object to the database table.
+ */
 @Entity
+@Table(name = "books")
 public class Book {
-    
+
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)  // Auto-generate primary key
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
+
     private String title;
     private String author;
-    private double price;
-    private int quantity;
+    private Double price;
 
-    // Getters and Setters 
+    // Constructors
+    public Book() {
+    }
+
+    public Book(String title, String author, Double price) {
+        this.title = title;
+        this.author = author;
+        this.price = price;
+    }
+
+    // Getters and Setters
     public Long getId() {
         return id;
     }
@@ -43,19 +57,11 @@ public class Book {
         this.author = author;
     }
 
-    public double getPrice() {
+    public Double getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(Double price) {
         this.price = price;
-    }
-
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
     }
 }

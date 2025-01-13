@@ -1,19 +1,22 @@
 package com.bookstore.dto;
 
-// DTO to avoid exposing the entity directly
+/**
+ * Data Transfer Object for transferring Book data.
+ */
 public class BookDTO {
-    
+
     private String title;
     private String author;
-    private double price;
-    private int quantity;
+    private Double price;
 
-    // Constructor
-    public BookDTO(String title, String author, double price, int quantity) {
+    // Constructors
+    public BookDTO() {
+    }
+
+    public BookDTO(String title, String author, Double price) {
         this.title = title;
         this.author = author;
         this.price = price;
-        this.quantity = quantity;
     }
 
     // Getters and Setters
@@ -33,19 +36,11 @@ public class BookDTO {
         this.author = author;
     }
 
-    public double getPrice() {
+    public Double getPrice() {
         return price;
     }
 
-    public void setPrice(double price) {
+    public void setPrice(Double price) {
         this.price = price;
-    }
-
-    public int getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(int quantity) {
-        this.quantity = quantity;
     }
 }

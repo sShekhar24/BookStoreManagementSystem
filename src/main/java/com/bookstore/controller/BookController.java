@@ -3,41 +3,46 @@ package com.bookstore.controller;
 import com.bookstore.dto.BookDTO;
 import com.bookstore.entity.Book;
 import com.bookstore.service.BookService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.stream.Collectors;
 
-// REST Controller for handling book requests
+/**
+ * REST Controller for handling HTTP requests related to Books.
+ */
 @RestController
-@RequestMapping("/api/books")
+@RequestMapping("/books")
 public class BookController {
 
-    @Autowired
-    private BookService bookService;
+    private final BookService bookService;
 
-    @PostMapping("/add")
-    public ResponseEntity<Book> addBook(@RequestBody BookDTO bookDTO) {
-        Book book = bookService.addBook(bookDTO);
-        return ResponseEntity.ok(book);
+    public BookController(BookService bookService) {
+        this.bookService = bookService;
     }
 
-    @GetMapping("/")
-    public List<Book> getAllBooks() {
-        return bookService.getAllBooks();
+    /**
+     * Retrieve all books.
+     *
+     * @return List of BookDTO objects.
+     */
+    @GetMapping
+    public List<BookDTO> getAllBooks() {
+        return bookService.getAllBooks().stream()
+                .map(book -> new BookDTO(book.getTitle(), book.getAuthor(), book.getPrice()))
+                .collect(Collectors.toList());
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Book> getBookById(@PathVariable Long id) {
-        Optional<Book> book = bookService.getBookById(id);
-        return book.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
-    }
-
-    @PutMapping("/update/{id}")
-    public ResponseEntity<Book> updateBookQuantity(@PathVariable Long id, @RequestParam int quantity) {
-        Book book = bookService.updateBookQuantity(id, quantity);
-        return book != null ? ResponseEntity.ok(book) : ResponseEntity.notFound().build();
+    /**
+     * Save a new book.
+     *
+     * @param bookDTO BookDTO received in the request body.
+     * @return The saved BookDTO object.
+     */
+    @PostMapping
+    public BookDTO saveBook(@RequestBody BookDTO bookDTO) {
+        Book book = new Book(bookDTO.getTitle(), bookDTO.getAuthor(), bookDTO.getPrice());
+        Book savedBook = bookService.saveBook(book);
+        return new BookDTO(savedBook.getTitle(), savedBook.getAuthor(), savedBook.getPrice());
     }
 }
