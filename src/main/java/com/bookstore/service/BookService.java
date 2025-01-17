@@ -12,28 +12,33 @@ import java.util.List;
 @Service
 public class BookService {
 
-    private final BookRepository bookRepository;
+	/**
+	 * BookRepository is injected into BookService using constructor injection
+	 * Avoids issues like circular dependencies compared to field injection 
+	 * Methods like getAllBooks() and saveBook() can be reused by multiple controllers or
+	 * other services Enables adding complex business rules or validations without
+	 * cluttering other layers
+	 */
+	private final BookRepository bookRepository;
 
-    public BookService(BookRepository bookRepository) {
-        this.bookRepository = bookRepository;
-    }
+	public BookService(BookRepository bookRepository) {
+		this.bookRepository = bookRepository;
+	}
 
-    /**
-     * Retrieve all books from the database.
-     *
-     * @return List of books.
-     */
-    public List<Book> getAllBooks() {
-        return bookRepository.findAll();
-    }
+	/**
+	 * Retrieve all books from the database.
+	 * @return List of books.
+	 */
+	public List<Book> getAllBooks() {
+		return bookRepository.findAll();
+	}
 
-    /**
-     * Save a new book to the database.
-     *
-     * @param book Book object to save.
-     * @return The saved Book.
-     */
-    public Book saveBook(Book book) {
-        return bookRepository.save(book);
-    }
+	/**
+	 * Save a new book to the database.
+	 * @param book Book object to save.
+	 * @return The saved Book.
+	 */
+	public Book saveBook(Book book) {
+		return bookRepository.save(book);
+	}
 }

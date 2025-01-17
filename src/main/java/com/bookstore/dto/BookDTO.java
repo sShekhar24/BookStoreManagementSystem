@@ -10,6 +10,7 @@ public class BookDTO {
     private Double price;
 
     // Constructors
+    //Allows creating an empty DTO object, which is later populated using setters or deserialization
     public BookDTO() {
     }
 

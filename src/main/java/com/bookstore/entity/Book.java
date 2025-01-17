@@ -7,7 +7,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 /**
- * Entity class representing the "Book" table in the database.
+ * Entity class representing the "Books" table in the database.
  * Maps the Java object to the database table.
  */
 @Entity
@@ -23,6 +23,7 @@ public class Book {
     private Double price;
 
     // Constructors
+    //Required by JPA to instantiate the entity class using reflection during runtime
     public Book() {
     }
 
