@@ -1,33 +1,19 @@
 package com.bookstore.entity;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Table;
 
-/**
- * Entity class representing the "Books" table in the database.
- * Maps the Java object to the database table.
- */
 @Entity
-@Table(name = "books")
 public class Book {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private String title;
     private String author;
-    private Double price;
+    private double price;
 
-    // Constructors
-    //Required by JPA to instantiate the entity class using reflection during runtime
-    public Book() {
-    }
-
-    public Book(String title, String author, Double price) {
+    // Constructor
+    public Book(String title, String author, double price) {
         this.title = title;
         this.author = author;
         this.price = price;
@@ -58,11 +44,11 @@ public class Book {
         this.author = author;
     }
 
-    public Double getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(Double price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 }

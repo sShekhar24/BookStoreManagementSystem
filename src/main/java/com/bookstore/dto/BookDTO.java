@@ -1,20 +1,23 @@
 package com.bookstore.dto;
 
-/**
- * Data Transfer Object for transferring Book data.
- */
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+
 public class BookDTO {
 
+    @NotBlank(message = "Title cannot be blank")
     private String title;
+
+    @NotBlank(message = "Author cannot be blank")
     private String author;
+
+    @NotNull(message = "Price cannot be null")
+    @Positive(message = "Price must be greater than zero")
     private Double price;
 
-    // Constructors
-    //Allows creating an empty DTO object, which is later populated using setters or deserialization
-    public BookDTO() {
-    }
-
-    public BookDTO(String title, String author, Double price) {
+    // Constructor
+    public BookDTO(String title, String author, double price) {
         this.title = title;
         this.author = author;
         this.price = price;
@@ -37,11 +40,11 @@ public class BookDTO {
         this.author = author;
     }
 
-    public Double getPrice() {
+    public double getPrice() {
         return price;
     }
 
-    public void setPrice(Double price) {
+    public void setPrice(double price) {
         this.price = price;
     }
 }
