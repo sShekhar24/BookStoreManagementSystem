@@ -49,4 +49,17 @@ public class BookService {
     public Optional<Book> getBookById(Long id) {
         return bookRepository.findById(id);
     }
+
+    /**
+     * Delete a book by its ID.
+     *
+     * @param id ID of the book to delete.
+     * @throws IllegalArgumentException if the book does not exist.
+     */
+    public void deleteBookById(Long id) {
+        if (!bookRepository.existsById(id)) {
+            throw new IllegalArgumentException("Book with id " + id + " does not exist.");
+        }
+        bookRepository.deleteById(id);
+    }
 }
