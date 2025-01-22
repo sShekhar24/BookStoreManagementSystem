@@ -1,4 +1,4 @@
-package com.bookstore.exception;
+package com.library.exception;
 
 public class ResourceNotFoundException extends RuntimeException {
 
