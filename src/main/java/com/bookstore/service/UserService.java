@@ -1,33 +1,42 @@
 package com.bookstore.service;
 
-import java.util.Optional;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.bookstore.entity.User;
 import com.bookstore.repository.UserRepository;
+import com.bookstore.dto.UserDTO;
 
 @Service
 public class UserService {
 
-    private final UserRepository userRepository;
-    private final PasswordEncoder passwordEncoder;
+    @Autowired
+    private UserRepository userRepository;
 
-    public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
-        this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncoder;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    // Method to register a user
+    public void register(UserDTO userDTO) {
+        // Convert DTO to entity
+        User user = new User();
+        user.setUsername(userDTO.getUsername());
+        user.setPassword(passwordEncoder.encode(userDTO.getPassword())); // Encrypt the password
+
+        // Save user in the database
+        userRepository.save(user);
     }
 
-    public User registerUser(User user) {
-        if (userRepository.existsByUsername(user.getUsername())) {
-            throw new RuntimeException("User already exists with username: " + user.getUsername());
+    // Method to authenticate a user
+    public boolean authenticate(UserDTO userDTO) {
+        // Fetch the user from the database based on username
+        User user = userRepository.findByUsername(userDTO.getUsername());
+
+        // Check if the user exists and the password matches
+        if (user != null && passwordEncoder.matches(userDTO.getPassword(), user.getPassword())) {
+            return true;
         }
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        return userRepository.save(user);
-    }
-
-    public Optional<User> findByUsername(String username) {
-        return userRepository.findByUsername(username);
+        return false;
     }
 }
