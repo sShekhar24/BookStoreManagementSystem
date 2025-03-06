@@ -8,8 +8,11 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import com.library.security.CustomUserDetailsService;
+
+import jakarta.servlet.Filter;
 
 @Configuration
 public class SecurityConfig {
@@ -25,23 +28,20 @@ public class SecurityConfig {
 		http
 		.csrf(csrf -> csrf.disable()) // Disable CSRF for simplicity (enable as needed)
 		.authorizeHttpRequests(auth -> auth
-				.requestMatchers("/books/view").permitAll() // Allow guests to view books
-				.requestMatchers("/admin/**").hasRole("ADMIN") // Admin access
-				.requestMatchers("/librarian/**").hasRole("LIBRARIAN") // Librarian access
-				.requestMatchers("/student/**").hasRole("STUDENT") // Student access
-				.requestMatchers("/api/users/**").hasAnyRole("ADMIN", "USER") // Admin/User access
+				.requestMatchers("/books/view","/api/users","/api/auth/**").permitAll() // Allow guests to view books
+				.requestMatchers("/admin/**").hasAuthority("ADMIN") // Admin access
+				.requestMatchers("/librarian/**").hasAnyAuthority("LIBRARIAN", "ADMIN") // Librarian access
+				.requestMatchers("/api/books/**").hasAnyAuthority("STUDENT", "ADMIN") // Student access
 				.anyRequest().authenticated() // Authenticate all other requests
 				)
-		.formLogin(form -> form
-				.loginPage("/login") // Custom login page
-				.permitAll()
-				)
-		.logout(logout -> logout
-				.logoutUrl("/logout") // Custom logout endpoint
-				.permitAll()
-				);
+		.userDetailsService(customUserDetailsService)
+		.addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
 		return http.build();
+	}
+
+	private Filter jwtAuthenticationFilter() {
+		return new JwtAuthenticationFilter();
 	}
 
 	@Bean

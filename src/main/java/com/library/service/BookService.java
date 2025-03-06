@@ -1,5 +1,6 @@
 package com.library.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,4 +27,13 @@ public class BookService {
         Optional<Book> bookOptional = bookRepository.findById(id);
         return bookOptional.orElse(null); // Return the book or null if not found
     }
+
+	public Book createBook(Book book) {
+		return bookRepository.save(book);
+	}
+
+	public List<Book> findAll() {
+		return bookRepository.findAll();
+//		return List.of(new Book());
+	}
 }
